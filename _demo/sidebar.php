@@ -18,9 +18,6 @@ echo '<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>'
             echo ' <a href="#">資料管理</a>  ';
             echo ' <a href="#">行銷管理</a>  ';                           
             
-        }
-
-       
+        }       
 echo ' </div>';  
-
 ?>

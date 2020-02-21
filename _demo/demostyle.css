@@ -35,6 +35,8 @@ h1, h2, h3 {
     color: #818181;
     display: block;
     transition: 0.3s;
+    /* Word-position fixed. */
+    word-break: keep-all;
 }
 
 .sidebar a:hover {

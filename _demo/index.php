@@ -14,14 +14,10 @@ if (isset($_POST["btnOK"])) {
     $sUserName = $_POST["txtacc"];
     $sPassword = $_POST["txtpwd"];
     if ($sPassword !== "") {
-        if (strpos($sUserName, $admin) !== false) {
-            //Redirect to admin.
+        //Fake login filter is here.
+        if (strpos($sUserName, $admin) !== false || strpos($sUserName, $seller) !== false) {
             $_SESSION["username"] = $sUserName;
-            header('Location: index_admin.php');
-        } else if (strpos($sUserName, $seller) !== false) {
-            //Redirect to seller
-            $_SESSION["username"] = $sUserName;
-            header('Location: index_seller.php');
+            header('Location: back.php');
         } else {
             $error = '無效帳號！';
             //echo "<script type='text/javascript'>alert('無效帳號！');</script>";
