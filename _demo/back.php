@@ -2,7 +2,7 @@
 session_start();
 
 //Prevents direct connection.
-if ($_SESSION['username'] == '') {
+if ($_COOKIE['username'] == '') {
     header('Location: index.php');
     //echo "<script type='text/javascript'>alert('請先登入！');</script>";
 }
@@ -35,12 +35,11 @@ if ($_SESSION['username'] == '') {
 
 <body>
 <?php include 'sidebar.php';?>
- 
-
     <div id="main">
         <button class="openbtn" id='openbtn' onclick="openNav()">☰ 展開選單</button>
-        <button class='outbtn' id='logout' onclick='logout()'>登出</button>
-        <h3 style="float: right;">Hello, <?php print_r($_SESSION['username']);?></h3>
+        <!-- <button class='outbtn' id='logout' onclick='logout()'>登出</button> -->
+        <a href='index.php?logout=1'><button class='outbtn' id='logout'>登出</button></a>
+        <h3 style="float: right;">Hello, <?php print_r($_COOKIE['username']);?></h3>
     </div>
 
     <footer>

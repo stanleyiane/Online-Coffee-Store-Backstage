@@ -16,8 +16,12 @@ function closeNav() {
     // document.getElementById('mySidebar').style.display = 'none';
 }
 
-// Fake logout.
+//Negligible. Not used.
 function logout() {
+    //php SESSION =/= JS sessionStorage!
+    // sessionStorage.clear();
+    // sessionStorage.removeItem('username');
+    // sessionStorage.removeItem('AorS');
     location.href = 'index.php';
 }
 

@@ -1,10 +1,58 @@
 <?php
 session_start();
-unset($_SESSION['username']);
-// Fake login:
-// If account contains 'admin' ^ 'seller':
-// Redirect to corresponded page.
-// If invalid ^ no pwd: error message.
+if (isset($_GET["logout"])) {
+    setcookie("username", "", time() - 3600);
+    unset($_SESSION['AorS']);
+}
+
+//SESSION: stored in server.
+// COOKIE: stored in client.
+//setcookie("myData", $Data, time()+60*60*24);
+
+//Return:
+//admin  -->0
+//seller -->1
+//Invalid-->-1
+function loginCheck($acc, $pwd)
+{
+    header("content-type:text/html; charset=utf-8");
+    $link = @mysqli_connect("localhost", "root", "") or die(mysqli_connect_error());
+    $result = mysqli_query($link, "set names utf8");
+    mysqli_select_db($link, "coffee");
+
+    //Seller filter.
+    $commandText = "select * from sellers";
+    $result = mysqli_query($link, $commandText);
+    while ($row = mysqli_fetch_assoc($result)) {
+        if ($row['sAccount'] == $acc && $row['sPassword'] == $pwd) {
+            mysqli_close($link);
+            $_SESSION["AorS"] = 1;
+            return 1;
+        } else {
+            continue;
+        }
+
+    }
+
+    //Admin filter.
+    $commandText = "select * from admins";
+    $result = mysqli_query($link, $commandText);
+    while ($row = mysqli_fetch_assoc($result)) {
+        if ($row['aAccount'] == $acc && $row['aPassword'] == $pwd) {
+            mysqli_close($link);
+            $_SESSION["AorS"] = 0;
+            return 0;
+        } else {
+            continue;
+        }
+
+    }
+
+    //Invalid case:
+    mysqli_close($link);
+    return -1;
+}
+
 $sUserName = "";
 $error = "";
 $seller = 'seller';
@@ -13,17 +61,16 @@ $admin = 'admin';
 if (isset($_POST["btnOK"])) {
     $sUserName = $_POST["txtacc"];
     $sPassword = $_POST["txtpwd"];
-    if ($sPassword !== "") {
-        //Fake login filter is here.
-        if (strpos($sUserName, $admin) !== false || strpos($sUserName, $seller) !== false) {
-            $_SESSION["username"] = $sUserName;
+    //Empty contents shall not pass.
+    if ($sPassword !== "" && $sUserName !== "") {
+        if (loginCheck($sUserName, $sPassword) >= 0) {
+            setcookie("username", $sUserName);
             header('Location: back.php');
         } else {
-            $error = '無效帳號！';
-            //echo "<script type='text/javascript'>alert('無效帳號！');</script>";
+            $error = '帳號或密碼錯誤！';
         }
     } else {
-        $error = '密碼欄位不得為空白。';
+        $error = '密碼或欄位不得為空白。';
         //echo "<script type='text/javascript'>alert('密碼欄位不得為空白。');</script>";
         // header("Refresh:0");
         // header('Location: index.php');
